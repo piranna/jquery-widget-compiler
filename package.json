@@ -8,6 +8,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Sergio Garcia Murillo @eface2face",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eface2face/jquery--widget-compiler"
+  },
   "license": "MIT",
   "dependencies": {
     "lodash": "^3.2.0",
