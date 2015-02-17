@@ -1,6 +1,6 @@
 {
   "name": "jquery-widget-compiler",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "jQuery pseudo web components based on UI widgets and Meteor Blaze reactive templates",
   "main": "jquery-widget-compiler.js",
   "bin": "bin/jquery-widget-compiler.js",
@@ -10,7 +10,7 @@
   "author": "Sergio Garcia Murillo @eface2face",
   "repository": {
     "type": "git",
-    "url": "https://github.com/eface2face/jquery--widget-compiler"
+    "url": "https://github.com/eface2face/jquery-widget-compiler"
   },
   "license": "MIT",
   "dependencies": {
