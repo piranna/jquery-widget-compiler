@@ -1,0 +1,21 @@
+{
+  "name": "jquery-widget-compiler",
+  "version": "1.0.0",
+  "description": "jQuery pseudo web components based on UI widgets and Meteor Blaze reactive templates",
+  "main": "jquery-widget-compiler.js",
+  "bin": "bin/jquery-widget-compiler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sergio Garcia Murillo @eface2face",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^3.2.0",
+    "meteor-blaze-tools": "^1.2.5",
+    "meteor-client": "^1.2.2",
+    "meteor-core": "^1.2.5",
+    "meteor-html-tools": "^1.2.5",
+    "meteor-htmljs": "^1.2.5",
+    "meteor-spacebars-compiler": "^1.2.5"
+  }
+}
