@@ -16,12 +16,13 @@
 					return self.a.get()*self.b.get();
 				})
 				.render()
-				.on('click #number-a',function () {
+				.on('click','#number-a', function () {
 					self.a.set(self.a.get() + 1);
-				}).
-				.on('click #number-b': function () {
+				})
+				.on('click','#number-b', function () {
 					self.b.set(self.b.get() + 1);
 				});
+		}
 	});
 </script>
 

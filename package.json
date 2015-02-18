@@ -3,7 +3,9 @@
   "version": "1.0.1",
   "description": "jQuery pseudo web components based on UI widgets and Meteor Blaze reactive templates",
   "main": "jquery-widget-compiler.js",
-  "bin": "bin/jquery-widget-compiler.js",
+  "bin": {
+    "jquery-widget-compiler": "bin/jquery-widget-compiler.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -20,6 +22,15 @@
     "meteor-core": "^1.2.5",
     "meteor-html-tools": "^1.2.5",
     "meteor-htmljs": "^1.2.5",
-    "meteor-spacebars-compiler": "^1.2.5"
-  }
+    "meteor-spacebars-compiler": "^1.2.5",
+    "uglify-js": "^2.4.16"
+  },
+  "bugs": {
+    "url": "https://github.com/eface2face/jquery-widget-compiler/issues"
+  },
+  "homepage": "https://github.com/eface2face/jquery-widget-compiler",
+  "directories": {
+    "example": "example"
+  },
+  "devDependencies": {}
 }
