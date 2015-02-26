@@ -13,6 +13,7 @@ function parse(data) {
 	var scripts = "";
 	var links = "";
 	var templates = "";
+	var styles = "";
 	//Parse html content
 	var html = Meteor.SpacebarsCompiler.parse(String(data));
 	//Now parse all elements
@@ -53,13 +54,17 @@ function parse(data) {
 						links += ".attr('"+k+"','"+html[i].attrs[k]+"')";
 					links += ".appendTo(head);\r\n";
 					break;
+				case "style":
+					//TODO: parse style for errors?
+					styles += html[i].children[0];
+					break;
 				default:
 					console.log("Ignoring unkown tag: " + tag);
 			}
 		}
 	}
 	//Return widget
-	return {links: links, templates: templates, scripts: scripts };
+	return {links: links, templates: templates, scripts: scripts, styles: styles };
 }
 
 module.exports =
@@ -89,6 +94,12 @@ module.exports =
 					return console.log("Error writing output js file "+ err);
 				console.log("done!");
 			}); 
+			//Write css to file
+			fs.writeFile(options.css,widget.styles,{flags:'w'}, function(err) {
+				if(err) 
+					return console.log("Error writing output css file "+ err);
+				console.log("done!");
+			}); 
 		});
 	},
 	directory : function (options) {
@@ -98,6 +109,8 @@ module.exports =
 		js += "	var HTML = Meteor.HTML;\r\n";
 		js += "	var Blaze = Meteor.Blaze;\r\n";
 		js += "	var Spacebars = Meteor.Spacebars;\r\n";
+		//CSS 
+		var css = "";
 		//Traverse dir
 		var walk = function(dir,recursive,prefix) {
 			var files,i;
@@ -109,7 +122,7 @@ module.exports =
 				return console.log("Error accessing directory with input widget files for " + path + "." +err);
 			}
 			//Log
-			console.log("Processing " + dir);
+			console.log("Processing directory:" + dir);
 			
 			//For each file in dir
 			for(i=0;i<files.length;++i) {
@@ -150,6 +163,9 @@ module.exports =
 					js += "\t//Scripts\r\n";
 					js += tree.scripts;
 					js += "}());\r\n";	
+					//Write css
+					css += "/*** " + widget + " **/\r\n";
+					css += tree.styles;
 				}
 			}
 		};
@@ -161,7 +177,13 @@ module.exports =
 		fs.writeFile(options.output,js,{flags:'w'}, function(err) {
 			if(err) 
 				return console.log("Error writing output js file "+ err);
-			console.log("done!");
+			console.log("done js!");
+		}); 
+		//Write css to file
+		fs.writeFile(options.css,css,{flags:'w'}, function(err) {
+			if(err) 
+				return console.log("Error writing output css file "+ err);
+			console.log("done css!");
 		}); 
 	}
 };
