@@ -2,8 +2,7 @@
 var input,output,dir,i,i18n = false,recursive = false,prefix = '';
 
 function showHelp() {
-	//console.log("Usage: jquery-widget-compiler [-i|--input widget.html] [-d|--dir directory] [-r|--recursive]  -o|--output widget.js");
-	console.log("Usage: jquery-widget-compiler [-i|--input widget.html] -o|--output widget.js");
+	console.log("Usage: jquery-widget-compiler [-i|--input widget.html] [-d|--dir directory] [-r|--recursive]  -o|--output widget.js");
 };
 
 for(i=0;i<process.argv.length;++i) { 
@@ -37,10 +36,10 @@ if (input)
 		input: input,
 		output: output
 	});
-/*else if (dir)
+else if (dir)
 	compiler.directory({
 		dir: dir,
 		output: output,
 		recursive: recursive,
 	});
-*/
+
