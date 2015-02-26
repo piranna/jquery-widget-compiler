@@ -1,6 +1,6 @@
 {
   "name": "jquery-widget-compiler",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "jQuery pseudo web components based on UI widgets and Meteor Blaze reactive templates",
   "main": "jquery-widget-compiler.js",
   "bin": {
