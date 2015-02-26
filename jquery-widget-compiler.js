@@ -1,8 +1,12 @@
+'use strict'
+
 var fs       = require("fs");
 var path     = require("path");
 var lodash   = require("lodash");
 var uglify   = require("uglify-js");
 var Meteor   = require("meteor-core")(lodash);
+var async = require('async');
+
 require("meteor-htmljs")(Meteor);
 require("meteor-html-tools")(Meteor);
 require("meteor-blaze-tools")(Meteor);
@@ -16,6 +20,7 @@ function parse(data) {
 	var styles = "";
 	//Parse html content
 	var html = Meteor.SpacebarsCompiler.parse(String(data));
+	var i;
 	//Now parse all elements
 	for (i=0;i<html.length;++i) {
 		//Get tag name
@@ -102,28 +107,32 @@ module.exports =
 			}); 
 		});
 	},
-	directory : function (options) {
+	directory : function (options, callback) {
 		//JS file header
 		var js = "module.exports = function(jquery) {\r\n";
 		js += " var Meteor = jquery.Meteor;\r\n";
 		js += "	var HTML = Meteor.HTML;\r\n";
 		js += "	var Blaze = Meteor.Blaze;\r\n";
 		js += "	var Spacebars = Meteor.Spacebars;\r\n";
-		//CSS 
+		//CSS
 		var css = "";
 		//Traverse dir
-		var walk = function(dir,recursive,prefix) {
+		var walk = function(dir,recursive,prefix, cb) {
 			var files,i;
 			try {
 				//Get files
 				files = fs.readdirSync(dir);
 			} catch(err) {
 				//Exit
-				return console.log("Error accessing directory with input widget files for " + path + "." +err);
+				cb({
+					message: "Accessing directory with input widget files for " + dir,
+					error: err
+				});
+
+				// return;
 			}
 			//Log
 			console.log("Processing directory:" + dir);
-			
 			//For each file in dir
 			for(i=0;i<files.length;++i) {
 				//Get file name
@@ -132,7 +141,7 @@ module.exports =
 				var file = path.join(dir,name);
 				//Get file stats
 				var stats = fs.statSync(file);
-				//Check if it is a directory 
+				//Check if it is a directory
 				if (stats.isDirectory()) {
 					//If we are recursing
 					if (recursive)
@@ -168,22 +177,43 @@ module.exports =
 					css += tree.styles;
 				}
 			}
+			cb();
 		};
-		//Init recursivity
-		walk(options.dir,options.recursive,"");
-		//JS file footer
-		js += "};\r\n";	
-		//Write JS to file
-		fs.writeFile(options.output,js,{flags:'w'}, function(err) {
-			if(err) 
-				return console.log("Error writing output js file "+ err);
-			console.log("done js!");
-		}); 
-		//Write css to file
-		fs.writeFile(options.css,css,{flags:'w'}, function(err) {
-			if(err) 
-				return console.log("Error writing output css file "+ err);
-			console.log("done css!");
-		}); 
+		async.parallel([
+			function(cbAsync){
+				// Init recursivity
+				walk(options.dir, options.recursive, "", cbAsync);
+				//JS file footer
+				js += "};\r\n";
+			},
+			function(cbAsync){
+				// Write JS to file
+				fs.writeFile(options.output,js,{flags:'w'}, function(err) {
+					if(err) {
+						cbAsync("Error writing output js file "+ err);
+
+						return;
+					}
+					cbAsync();
+					console.log("done js!");
+				});
+			},
+			function(cbAsync) {
+				//Write css to file
+				fs.writeFile(options.css,css,{flags:'w'}, function(err) {
+					if(err) {
+						cbAsync("Error writing output js file "+ err);
+
+						return;
+					}
+					cbAsync();
+					console.log("done css!");
+				});
+			}
+		],
+		function (err) {
+			callback(err);
+		});
+
 	}
 };
